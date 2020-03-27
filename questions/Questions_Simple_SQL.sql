@@ -1,0 +1,24 @@
+/*
+* Source Pinal's Dave 
+* 
+* Simple Questions to check the knowledge
+* */
+
+SELECT 1+2'3'
+SELECT 1+'2' '3'
+SELECT A + '2' '3'
+----------------
+SELECT count(1)
+SELECT count(2)
+SELECT count(1+2)
+SELECT COUNT(1+'A')
+SELECT COUNT(1/0)
+SELECT COUNT(1/0/0)
+SELECT COUNT(1/-1)
+SELECT COUNT(NULL)
+SELECT COUNT(NULL/1)
+SELECT COUNT(1/NULL)
+SELECT COUNT(NULL/NULL)
+SELECT COUNT(NULL+1)-COUNT(1/1/1)
+-----
+SELECT -1Z

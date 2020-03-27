@@ -1,0 +1,17 @@
+version: '3.7'
+ 
+services:
+    sql2017:
+        image: mcr.microsoft.com/mssql/server:2017-latest
+        container_name: dockersql2
+        ports:  
+          - "1433:1433"
+          - "5022:5022"
+        environment:
+          SA_PASSWORD: "dbatools.IO"
+          ACCEPT_EULA: "Y"
+        volumes: 
+          - D:\docker:/var/opt/mssql/backups
+        #command: #exec it dockersql2 /opt/mssql-tools/bin/sqlcmd -U SA -P "dbatools.IO" -Q "CREATE DATABASE TERE"
+         #     --interval=15s CMD /opt/mssql-tools/bin/sqlcmd -U sa -P dbatools.IO -Q "CREATE DATABASE Tere"
+                
