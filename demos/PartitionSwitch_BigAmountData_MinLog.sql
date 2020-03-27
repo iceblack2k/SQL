@@ -1,7 +1,7 @@
 /*
 	Partition demo with split and SWITCH a big volumne of data
 	Move not partitioned data to staging table
-	Rebuild index on staging table with(DROP_EXISTING=ON)
+	Rebuild index on staging table with(DROP_EXISTING=ON) reduce space and I/O
 	Table switch
 */
 CREATE PARTITION FUNCTION fn_schemename(DATETIME)
@@ -130,7 +130,7 @@ AND i.type <= 1
 ORDER BY p.partition_number
 
 --00:04:07
---rebuild indexes on staging table using new scheme
+--rebuild indexes on staging table using new scheme using DROP_EXISTING = ON reduce space and I/O requirements
 CREATE CLUSTERED INDEX cdx_PartitionedTable_staging ON dbo.PartitionedTable_staging
 	(
 		PartitioningColumn
