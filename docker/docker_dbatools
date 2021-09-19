@@ -1,0 +1,46 @@
+# mssql-server-powershell-dbatools
+# Maintainers: Microsoft Corporation
+# GitRepo: https://github.com/Microsoft/mssql-docker
+
+# Base OS layer: Latest Ubuntu LTS
+FROM mcr.microsoft.com/mssql/server:2019-latest
+EXPOSE 1433
+
+# Install prerequistes including repo config for SQL server and PolyBase.
+#export DEBIAN_FRONTEND=noninteractive && \
+USER root
+
+RUN apt-get update && \
+    apt-get install -yq apt-transport-https curl gnupg2 p7zip-full wget software-properties-common && \
+    # Get official Microsoft repository configuration
+    #curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - && \
+    #curl https://packages.microsoft.com/config/ubuntu/16.04/mssql-server-preview.list | tee /etc/apt/sources.list.d/mssql-server-preview.list && \
+    #add-apt-repository "$(wget -qO- https://packages.microsoft.com/config/ubuntu/20.04/mssql-server-2019.list)" && \
+    curl https://packages.microsoft.com/config/ubuntu/20.04/mssql-server-2019.list | tee /etc/apt/sources.list.d/msprod.list && \
+    #curl https://packages.microsoft.com/config/ubuntu/20.04/prod.list | tee /etc/apt/sources.list.d/msprod.list && \
+    apt-get update && \
+    # Download the Microsoft repository GPG keys
+    wget -q https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb && \
+    # Register the Microsoft repository GPG keys
+    dpkg -i packages-microsoft-prod.deb && \
+    # Update the list of products
+    apt-get update && \
+    # Enable the "universe" repositories
+    add-apt-repository universe && \
+    # Install PowerShell
+    apt-get install -y powershell && \
+    # Install dbatools
+    pwsh -Command "Install-Module dbatools -Force -AllowClobber" && \
+    # Install PolyBase will also install SQL Server via dependency mechanism.
+    #apt-get install -y mssql-server-polybase && \
+    # Cleanup the Dockerfile
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists
+
+USER 10001
+# Run SQL Server process
+CMD /opt/mssql/bin/sqlservr
+
+# This entrypoint start sql server, restores data and waits infinitely
+#ENTRYPOINT ["./entrypoint.sh"]
+#CMD ["sleep infinity"]
